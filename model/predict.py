@@ -1,16 +1,9 @@
 import pandas as pd
-from pycaret.classification import *
+from tensorflow import keras
+import autokeras as ak
 
+MODEL_KERAS_PATH = './model/model_autokeras'
+MODEL = keras.models.load_model(MODEL_KERAS_PATH, custom_objects=ak.CUSTOM_OBJECTS)
 
-MODEL_PKL_PATH='./model/pickle_pycaret'
-MODEL = load_model(MODEL_PKL_PATH)
-
-def predict(data):
-    return predict_model(MODEL, data = data, raw_score = True)
-
-def predict_image(image):
-    img_row = image.reshape(1, -1)
-    df = pd.DataFrame(img_row, columns=[f"pixel_{i}" for i in range(img_row.shape[1])])
-    
-
-    return predict(df)
+def predict_image(data):
+    return MODEL.predict(data)
